@@ -26,18 +26,24 @@ export class Shop implements OnInit{
       price: ['', Validators.required],
       stock: ['', Validators.required]
     })
-    this.productService.getAll().subscribe({
-      next: (response) => {
-        this.products.set(response.data);
-        console.log(response);
-      }
-    });
+
+    this.loadProducts();
+
     this.route.queryParams.subscribe(params => {
     if (params['updated']) {
       this.showSuccessMessage('Product updated successfully!');
     }
   });
     
+  }
+
+  loadProducts(){
+    this.productService.getAll().subscribe({
+      next: (response) => {
+        this.products.set(response.data);
+        console.log(response);
+      }
+    });
   }
 
   onSubmit() {
@@ -49,10 +55,12 @@ export class Shop implements OnInit{
     };
     this.productService.create(newProduct).subscribe({
       next: (response) => {
-        alert('product added')
+        alert(`Product ${response.name} created successfully`);
+        this.loadProducts();
       },
-      error: () => {
-        alert('product add failed')
+      error: (response) => {
+        var msg = response.error?.message;
+        alert(msg);
       }
     })
   }

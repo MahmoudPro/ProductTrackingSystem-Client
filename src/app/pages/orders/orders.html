@@ -26,7 +26,7 @@
             <label for="product" class="form-label">Products</label>
             <select formControlName="productId" class="form-select">
               <option [ngValue]="null">Choose Product</option>
-              <option *ngFor="let p of products" [ngValue]="p.id">
+              <option *ngFor="let p of products" [ngValue]="p.id" [hidden]="p.quantityInStock === 0">
                 {{ p.name }} ({{ p.price | currency }}) -- {{ p.quantityInStock }}
               </option>
             </select>

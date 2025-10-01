@@ -29,16 +29,20 @@ export class Orders implements OnInit {
   constructor(private productService: Product) {}
 
   ngOnInit() {
+    
+    this.loadProducts();
+    // dynamic total calculation
+    this.orderForm.valueChanges.subscribe(() => {
+      console.log('Total price:', this.totalPrice);
+    });
+  }
+
+  loadProducts(){
     this.productService.getAll().subscribe({
       next: (response) => {
         this.products = response.data;
         console.log(response);
       }
-    });
-
-    // dynamic total calculation
-    this.orderForm.valueChanges.subscribe(() => {
-      console.log('Total price:', this.totalPrice);
     });
   }
 
@@ -72,11 +76,10 @@ export class Orders implements OnInit {
     const order = this.orderForm.value;
     this.ordersService.create(order).subscribe({
       next: (response) => {
-        // this.orders.push(response); // live table update
-
         this.orderForm.reset();
         this.orderLines.clear();
         this.successMessage = 'تم استلام طلبكم بنجاح';
+        this.loadProducts();
       },
       error: (response) => {
         var msg = response.error?.message;
