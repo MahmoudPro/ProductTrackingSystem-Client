@@ -1,0 +1,57 @@
+<section class="container">
+  @if (errorMessage) {
+  <div class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+  } @if (successMessage) {
+  <div class="alert alert-success" role="alert">
+    {{ successMessage }}
+  </div>
+  }
+  <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="customerName" class="form-label">Customer Name</label>
+      <input formControlName="customerName" placeholder="Customer Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label for="notes" class="form-label">Notes</label>
+      <textarea formControlName="notes" placeholder="Notes" class="form-control"></textarea>
+    </div>
+
+    <div formArrayName="orderLines">
+      <div *ngFor="let line of orderLines.controls; let i = index" [formGroupName]="i">
+        <div class="row mb-3">
+          <div class="col">
+            <label for="product" class="form-label">Products</label>
+            <select formControlName="productId" class="form-select">
+              <option [ngValue]="null">Choose Product</option>
+              <option *ngFor="let p of products" [ngValue]="p.id">
+                {{ p.name }} ({{ p.price | currency }}) -- {{ p.quantityInStock }}
+              </option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input type="number" formControlName="quantity" min="1" class="form-control" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-danger" (click)="removeOrderLine(i)">
+          Remove
+        </button>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-success mt-3" (click)="addOrderLine()">
+      + Add Product
+    </button>
+
+    <p>
+      <strong>Total: {{ totalPrice | currency }}</strong>
+    </p>
+
+    <button type="submit" class="btn btn-primary">Submit Order</button>
+  </form>
+</section>
+
+

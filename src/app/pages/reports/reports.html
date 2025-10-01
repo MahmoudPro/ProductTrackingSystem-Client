@@ -1,0 +1,32 @@
+<section class="container">
+  <h3>Live Orders</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Order Date</th>
+        <th>Products</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orders(); track order.id) {
+      <tr>
+        <td>{{ order.customerName }}</td>
+        <td>{{ order.orderDate | date : 'short' }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let line of order.orderLines">
+              {{ line.productName }} — {{ line.quantity }} × {{ line.unitPrice | currency }} =
+              {{ line.subTotal | currency }}
+            </li>
+          </ul>
+        </td>
+        <td>
+          <strong>{{ order.totalAmount | currency }}</strong>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
