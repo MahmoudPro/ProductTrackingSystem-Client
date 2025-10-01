@@ -73,12 +73,14 @@ export class Orders implements OnInit {
     this.ordersService.create(order).subscribe({
       next: (response) => {
         // this.orders.push(response); // live table update
+
         this.orderForm.reset();
         this.orderLines.clear();
         this.successMessage = 'تم استلام طلبكم بنجاح';
       },
-      error: () => {
-        this.errorMessage = 'فشل اضافة الطلب, حاول مرة اخرى';
+      error: (response) => {
+        var msg = response.error?.message;
+        this.errorMessage = msg ? msg : 'حدث خطأ ما، يرجى المحاولة لاحقاً';
       }
     });
   }
